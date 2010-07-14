@@ -29,7 +29,7 @@ class TerraHTMLParser(HTMLParser.HTMLParser):
 
     def handle_data(self, data):
         if len(self.stack) > 0:
-            print data,
+            print data.upper(),
 
     @classmethod
     def run(cls, markup):
