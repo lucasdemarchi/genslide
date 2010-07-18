@@ -35,6 +35,11 @@ def main(*args):
     parser = find_parser(url_parse_result.netloc)
     parsed_text = parser.run(html)
 
+    slidefmt = SlideFormatter('/tmp/', '/tmp/')
+    parsed_text = slidefmt.format(parsed_text)
+    for line in parsed_text:
+        print line.encode('utf-8'),
+
 if __name__ == "__main__":
     sys.exit(main(*sys.argv))
 
