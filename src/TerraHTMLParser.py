@@ -9,33 +9,34 @@ class TerraHTMLParser(HTMLParser.HTMLParser):
     def __init__(self, *args, **kwargs):
         HTMLParser.HTMLParser.__init__(self)
         self.stack = []
+        self.data = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag.lower() == 'div' and attrs.has_key('id') and attrs['id'] == 'div_letra':
             self.stack.append(tag)
-        elif len(self.stack) > 0 and tag.lower() == 'br':
-            print "",
 
     def handle_startendtag(self, tag, attrs):
-        if tag.lower() == 'br':
-            print "",
+        pass
 
     def handle_endtag(self, tag):
         if len(self.stack) > 0 and tag.lower() == "div":
             self.stack.pop()
         elif len(self.stack) > 0 and tag.lower() == 'p':
-           print "\n",
+           self.data.append('\n')
 
     def handle_data(self, data):
-        if len(self.stack) > 0:
-            print data.upper(),
+        if len(self.stack) > 0 and data.strip() != '':
+            self.data.append(data.strip().upper() + '\n')
+
+    def run(self, markup):
+        self.feed(markup)
+        self.close()
+        return self.data
 
     @classmethod
-    def run(cls, markup):
-        _p = cls()
-        _p.feed(markup)
-        _p.close()
+    def list_netlocs(self):
+        return ['letras.terra.com.br']
 
 if __name__ == "__main__":
     test_string = '''
@@ -48,4 +49,6 @@ Quando forçado és contra as ondas lutar<br/>
 </div>
 </body>
 '''
-    TerraHTMLParser.run(test_string)
+    lines = TerraHTMLParser().run(test_string)
+    for line in lines:
+        print line,
