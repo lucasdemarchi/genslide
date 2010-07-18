@@ -5,9 +5,21 @@ Copyright (C) 2010 Lucas De Marchi <lucas.de.marchi@gmail.com>
 """
 
 import sys
+import urlparse
+from optparse import OptionParser
+
 from URLOpener import URLOpener
 from TerraHTMLParser import TerraHTMLParser
-from optparse import OptionParser
+from SlideFormatter import SlideFormatter
+
+def find_parser(netloc):
+    netlocs = []
+
+    # put all parsers here
+    netlocs.extend(TerraHTMLParser.list_netlocs())
+
+    # FIXME: iterate trough parsers and find right parser
+    return TerraHTMLParser()
 
 def main(*args):
     usage = "%prog [options] address"
@@ -16,8 +28,12 @@ def main(*args):
     if len(args) != 1:
         raise Exception('Wrong number of args')
     addr = args[0]
+
     html = URLOpener.open(addr)
-    TerraHTMLParser.run(html)
+
+    url_parse_result = urlparse.urlparse(addr)
+    parser = find_parser(url_parse_result.netloc)
+    parsed_text = parser.run(html)
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv))
