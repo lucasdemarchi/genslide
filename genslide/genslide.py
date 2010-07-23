@@ -29,6 +29,7 @@ class Schemes:
 def find_method(scheme):
     schemes = {
             '': Schemes.LOCAL,
+            'file': Schemes.LOCAL,
             'http': Schemes.EXTERN,
             'ftp': Schemes.EXTERN,
             'https': Schemes.EXTERN
@@ -57,7 +58,7 @@ def main(*args):
         parser = find_parser(addr_parse_result.netloc)
         parsed_text = parser.run(html)
     else:
-        with open(addr, 'r') as f:
+        with open(addr_parse_result.path, 'r') as f:
             parsed_text = f.readlines()
 
     slidefmt = SlideFormatter('/tmp/', '/tmp/')
