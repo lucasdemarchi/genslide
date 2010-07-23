@@ -1,2 +1,14 @@
 *.pyc
 *.swp
+INSTALL
+Makefile
+Makefile.in
+NEWS
+aclocal.m4
+autom4te.cache/
+config.log
+config.status
+configure
+install-sh
+missing
+py-compile
