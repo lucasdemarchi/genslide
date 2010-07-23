@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sysconfig
+
 class SlideFormatter:
-    DATA_DIR='/home/lucas/programming/genslide/data/'
-    header=DATA_DIR + 'header.tex'
-    footer=DATA_DIR + 'footer.tex'
+    header=sysconfig.template + '.header'
+    footer=sysconfig.template + '.footer'
 
     def __init__(self, outdir, builddir):
         self.outdir = outdir
@@ -23,7 +24,8 @@ class SlideFormatter:
 
     def format(self, text_in):
         #FIXME
-        with open(self.header, 'r') as f:
+        tmpl=sysconfig.template_file_get(self.header)
+        with open(tmpl, 'r') as f:
             text_out = f.readlines()
 
         # force last slide to be generated
@@ -39,7 +41,8 @@ class SlideFormatter:
                 line = line.strip() + ' \\\\\n'
                 aslide.append(line)
 
-        with open(self.footer, 'r') as f:
+        tmpl = sysconfig.template_file_get(self.footer)
+        with open(tmpl, 'r') as f:
             text_out.extend(f.readlines())
             text_out.append('\n')
 

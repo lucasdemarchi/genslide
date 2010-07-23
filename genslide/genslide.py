@@ -8,9 +8,9 @@ import sys
 import urlparse
 from optparse import OptionParser
 
-from URLOpener import URLOpener
-from TerraHTMLParser import TerraHTMLParser
-from SlideFormatter import SlideFormatter
+from url_opener import URLOpener
+from terra_html_parser import TerraHTMLParser
+from slide_formatter import SlideFormatter
 
 def find_parser(netloc):
     netlocs = []

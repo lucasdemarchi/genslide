@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os.path
+
+SYSTEM_DATA_DIR = '@prefix@/share/@PACKAGE_NAME@/data'
+VERSION = '@VERSION@'
+
+datadirs = []
+datadirs.append(os.path.join(os.path.dirname(__file__), '../data'))
+datadirs.append(os.path.expanduser("~/.@PACKAGE_NAME@/data/"))
+datadirs.append(SYSTEM_DATA_DIR)
+
+template = "default"
+
+def template_file_get(name):
+    for d in datadir:
+        _template = os.path.join(d, name + ".tex")
+        if os.path.exists(_template):
+            return _template
+    return os.path.join(SYSTEM_DATA_DIR, template)
+
