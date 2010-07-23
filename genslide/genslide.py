@@ -21,19 +21,44 @@ def find_parser(netloc):
     # FIXME: iterate trough parsers and find right parser
     return TerraHTMLParser()
 
-def main(*args):
+class Schemes:
+    LOCAL = 0
+    EXTERN = 1
+    UNKNOWN = 2
+
+def find_method(scheme):
+    schemes = {
+            '': Schemes.LOCAL,
+            'http': Schemes.EXTERN,
+            'ftp': Schemes.EXTERN,
+            'https': Schemes.EXTERN
+            }
+    ret = schemes.get(scheme, Schemes.UNKNOWN)
+    if ret == Schemes.UNKNOWN:
+        raise Exception("Unknown address")
+
+    return ret
+
+def parse_options():
     usage = "%prog [options] address"
     parser = OptionParser(usage=usage)
     (options, args) = parser.parse_args()
     if len(args) != 1:
         raise Exception('Wrong number of args')
+    return options, args
+
+def main(*args):
+    (options, args) = parse_options()
     addr = args[0]
-
-    html = URLOpener.open(addr)
-
-    url_parse_result = urlparse.urlparse(addr)
-    parser = find_parser(url_parse_result.netloc)
-    parsed_text = parser.run(html)
+    parsed_text = []
+    addr_parse_result = urlparse.urlparse(addr)
+    if find_method(addr_parse_result.scheme) != Schemes.LOCAL:
+        html = URLOpener.open(addr)
+        parser = find_parser(addr_parse_result.netloc)
+        parsed_text = parser.run(html)
+    else:
+        with open(addr, 'r') as f:
+            parsed_text = f.readlines()
 
     slidefmt = SlideFormatter('/tmp/', '/tmp/')
     parsed_text = slidefmt.format(parsed_text)
