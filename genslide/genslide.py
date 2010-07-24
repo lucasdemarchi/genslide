@@ -5,6 +5,7 @@ Copyright (C) 2010 Lucas De Marchi <lucas.de.marchi@gmail.com>
 """
 
 import sys
+import os
 import urlparse
 from optparse import OptionParser
 
@@ -41,11 +42,44 @@ def find_method(scheme):
     return ret
 
 def parse_options():
-    usage = "%prog [options] address"
+    usage = "%prog [options] <address|file>"
     parser = OptionParser(usage=usage)
+    parser.add_option('-c', '--max-cols',
+                      action='store', type='int', dest='max_cols',
+                      help='Max number of cols per slide. If a certain row ' \
+                              'is larger than this number, it will be split ' \
+                              'in the best possible manner. [NOT IMPLEMENTED YET]')
+    parser.add_option('-r', '--max-rows',
+                      action='store', type='int', dest='max_rows',
+                      help='Max number of rows per slide. If a verse conttains ' \
+                              'more rows than this number, it will be split in ' \
+                              'slides. [NOT IMPLEMENTED YET]')
+    parser.add_option('-o', '--output-dir',
+                      action='store', type='string', dest='output_dir', default=os.getcwd(),
+                      help='Directory in which the generated pdf or latex file will be let. ' \
+                              'Default is the current working directory. [ NOT USED YET]')
+    parser.add_option('-l', '--latex',
+                      action='store_true', dest='let_latex', default=False,
+                      help='Let the generated latex file on output directory. ' \
+                              '[NOT USED YET]')
+    parser.add_option('-L', '--latex-only',
+                      action='store_true',  dest='let_latex_only', default=False,
+                      help='Do not generate the pdf file, let only the latex file' \
+                              'on output directory. [NOT USED YET]')
+    parser.add_option('-T', '--template-dir',
+                      action='store', type='string', dest='template_dir',
+                      help='Use TEMPLATE_DIR in as a directory containing templates. ' \
+                              'It will be put in precedence to other default directories. ' \
+                              '[NOT USED YET]')
+    parser.add_option('-t', '--template',
+                      action='store', type='string', dest='template',
+                      help='Use TEMPLATE instead of the default one. [NOT USED YET]')
     (options, args) = parser.parse_args()
     if len(args) != 1:
-        raise Exception('Wrong number of args')
+        print 'ERROR: you must specify a file or internet address'
+        parser.print_help()
+        sys.exit(1)
+
     return options, args
 
 def main(*args):
