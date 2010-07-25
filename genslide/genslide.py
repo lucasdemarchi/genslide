@@ -12,6 +12,7 @@ from optparse import OptionParser
 from url_opener import URLOpener
 from terra_html_parser import TerraHTMLParser
 from slide_formatter import SlideFormatter
+import sysconfig
 
 def find_parser(netloc):
     netlocs = []
@@ -55,9 +56,10 @@ def parse_options():
                               'more rows than this number, it will be split in ' \
                               'slides. [NOT IMPLEMENTED YET]')
     parser.add_option('-o', '--output-dir',
-                      action='store', type='string', dest='output_dir', default=os.getcwd(),
-                      help='Directory in which the generated pdf or latex file will be let. ' \
-                              'Default is the current working directory. [ NOT USED YET]')
+                      action='store', type='string', dest='output_dir',
+                      help='Directory in which the generated latex file will be let. ' \
+                              'Default is to output to stdout. If a directory is ' \
+                              'specified, it will have the same name as input file')
     parser.add_option('-l', '--latex',
                       action='store_true', dest='let_latex', default=False,
                       help='Let the generated latex file on output directory. ' \
@@ -84,6 +86,7 @@ def parse_options():
 
 def main(*args):
     (options, args) = parse_options()
+    sysconfig.option_parser = options
     addr = args[0]
     parsed_text = []
     addr_parse_result = urlparse.urlparse(addr)
@@ -97,8 +100,16 @@ def main(*args):
 
     slidefmt = SlideFormatter('/tmp/', True)
     parsed_text = slidefmt.format(parsed_text)
-    for line in parsed_text:
-        print line.encode('utf-8'),
+    if sysconfig.option_parser.output_dir:
+        (tmp, outfile) = os.path.split(addr_parse_result.path)
+        (outfile, root) = os.path.splitext(outfile)
+        outfile += '.tex'
+        with open(os.path.join(sysconfig.option_parser.output_dir,
+                  outfile), 'w') as f:
+            f.writelines([l.encode('utf-8') for l in parsed_text])
+    else:
+        for line in parsed_text:
+            print line.encode('utf-8'),
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv))

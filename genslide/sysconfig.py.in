@@ -10,10 +10,12 @@ datadirs.append(os.path.join(os.path.dirname(__file__), '../data'))
 datadirs.append(os.path.expanduser("~/.@PACKAGE_NAME@/data/"))
 datadirs.append(SYSTEM_DATA_DIR)
 
+option_parser = None
+
 template = "default"
 
 def template_file_get(name):
-    for d in datadir:
+    for d in datadirs:
         _template = os.path.join(d, name + ".tex")
         if os.path.exists(_template):
             return _template
