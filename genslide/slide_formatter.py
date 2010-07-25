@@ -17,8 +17,7 @@ class SlideFormatter:
     header=sysconfig.template + '.header'
     footer=sysconfig.template + '.footer'
 
-    def __init__(self, outdir, builddir, toupper):
-        self.outdir = outdir
+    def __init__(self, builddir, toupper):
         self.builddir = builddir
         self.toupper = toupper
 

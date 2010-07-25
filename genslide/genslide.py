@@ -95,7 +95,7 @@ def main(*args):
         with open(addr_parse_result.path, 'r') as f:
             parsed_text = f.readlines()
 
-    slidefmt = SlideFormatter('/tmp/', '/tmp/', True)
+    slidefmt = SlideFormatter('/tmp/', True)
     parsed_text = slidefmt.format(parsed_text)
     for line in parsed_text:
         print line.encode('utf-8'),
