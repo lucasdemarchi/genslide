@@ -56,6 +56,20 @@ class SlideFormatter:
 
         return text_out
 
+    def finish_slide(self, slides, aslide):
+        #FIXME: this should be somehow in template
+        if len(slides) == 0:
+            aslide.lines.insert(0, '\\bfseries{\n')
+        aslide.lines.insert(0, '\\begin{center}\n')
+        aslide.lines.insert(0, '\\begin{frame}[allowframebreaks]\n')
+
+        #FIXME: this should be somehow in template
+        if len(slides) == 0:
+            aslide.lines.append('}\n')
+        aslide.lines.append('\\end{center}\n')
+        aslide.lines.extend(['\\end{frame}', '\n' , '\n'])
+
+        slides.append(aslide)
 
     def format(self, text_in):
         slides = []
@@ -66,21 +80,8 @@ class SlideFormatter:
         aslide = Slide(False)
         for line in text_in:
             if line.strip() == '' and aslide.lines != []:
-                #FIXME: this should be somehow in template
-                if len(slides) == 0:
-                    aslide.lines.insert(0, '\\bfseries{\n')
-                aslide.lines.insert(0, '\\begin{center}\n')
-                aslide.lines.insert(0, '\\begin{frame}[allowframebreaks]\n')
-
-                #FIXME: this should be somehow in template
-                if len(slides) == 0:
-                    aslide.lines.append('}\n')
-                aslide.lines.append('\\end{center}\n')
-                aslide.lines.extend(['\\end{frame}', '\n' , '\n'])
-
-                slides.append(aslide)
-
                 # start a new slide
+                self.finish_slide(slides, aslide)
                 aslide = Slide(False)
             elif line.strip() != '':
                 line = line.strip() + ' \\\\\n'
