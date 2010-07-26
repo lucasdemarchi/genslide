@@ -7,11 +7,20 @@ class Slide:
     def __init__(self, is_chorus):
         self.lines = []
         self._is_chorus = is_chorus
+        self._should_finish = False
 
     def is_chorus_set(self, is_chorus):
         self._is_chorus = is_chorus
     def is_chorus(self):
         return self._is_chorus
+    def should_finish(self):
+        if (self._should_finish or
+           (sysconfig.option_parser.max_rows and
+            len(self.lines) >= sysconfig.option_parser.max_rows)):
+            return True
+        return False
+    def should_finish_set(self, value):
+        self._should_finish = value
 
 class SlideFormatter:
     header=sysconfig.template + '.header'
@@ -81,8 +90,7 @@ class SlideFormatter:
         for line in text_in:
             if line.strip() == '' and aslide.lines != []:
                 # start a new slide
-                self.finish_slide(slides, aslide)
-                aslide = Slide(False)
+                aslide.should_finish_set(True)
             elif line.strip() == '\\':
                 aslide.lines.append('\\vskip 20pt\n')
             elif line.strip() != '':
@@ -90,6 +98,11 @@ class SlideFormatter:
                 if self.toupper:
                     line = line.upper()
                 aslide.lines.append(line)
+
+            if aslide.should_finish():
+                self.finish_slide(slides, aslide)
+                aslide = Slide(False)
+
 
         return self.glue_slides(slides)
 
