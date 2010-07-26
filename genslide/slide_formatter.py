@@ -83,6 +83,8 @@ class SlideFormatter:
                 # start a new slide
                 self.finish_slide(slides, aslide)
                 aslide = Slide(False)
+            elif line.strip() == '\\':
+                aslide.lines.append('\\vskip 20pt\n')
             elif line.strip() != '':
                 line = line.strip() + ' \\\\\n'
                 if self.toupper:
