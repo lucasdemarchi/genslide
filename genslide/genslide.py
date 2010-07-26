@@ -54,7 +54,7 @@ def parse_options():
                       action='store', type='int', dest='max_rows',
                       help='Max number of rows per slide. If a verse conttains ' \
                               'more rows than this number, it will be split in ' \
-                              'slides. [NOT IMPLEMENTED YET]')
+                              'slides.')
     parser.add_option('-o', '--output-dir',
                       action='store', type='string', dest='output_dir',
                       help='Directory in which the generated latex file will be let. ' \
