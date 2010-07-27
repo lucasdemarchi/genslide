@@ -3,6 +3,7 @@
 
 import sysconfig
 import textwrap
+import codecs
 
 class Slide:
     def __init__(self, is_chorus):
@@ -38,13 +39,13 @@ class SlideFormatter:
 
     def smart_split_line(self, line):
         if ((not self._twrapper) or len(line) <= self._max_cols):
-            return [line + '\\\\\n']
-        return [l + '\\\\\n' for l in self._twrapper.wrap(line)]
+            return [line + u'\\\\\n']
+        return [l + u'\\\\\n' for l in self._twrapper.wrap(line)]
 
     def glue_slides(self, slides):
         text_out = []
         tmpl=sysconfig.template_file_get(self.header)
-        with open(tmpl, 'r') as f:
+        with codecs.open(tmpl, encoding='utf-8', mode='r') as f:
             text_out = f.readlines()
 
         i = 0
@@ -61,22 +62,22 @@ class SlideFormatter:
         tmpl = sysconfig.template_file_get(self.footer)
         with open(tmpl, 'r') as f:
             text_out.extend(f.readlines())
-            text_out.append('\n')
+            text_out.append(u'\n')
 
         return text_out
 
     def finish_slide(self, slides, aslide):
         #FIXME: this should be somehow in template
         if len(slides) == 0:
-            aslide.lines.insert(0, '\\bfseries{\n')
-        aslide.lines.insert(0, '\\begin{center}\n')
-        aslide.lines.insert(0, '\\begin{frame}[allowframebreaks]\n')
+            aslide.lines.insert(0, u'\\bfseries{\n')
+        aslide.lines.insert(0, u'\\begin{center}\n')
+        aslide.lines.insert(0, u'\\begin{frame}[allowframebreaks]\n')
 
         #FIXME: this should be somehow in template
         if len(slides) == 0:
-            aslide.lines.append('}\n')
-        aslide.lines.append('\\end{center}\n')
-        aslide.lines.extend(['\\end{frame}', '\n' , '\n'])
+            aslide.lines.append(u'}\n')
+        aslide.lines.append(u'\\end{center}\n')
+        aslide.lines.extend([u'\\end{frame}', u'\n' , u'\n'])
 
         slides.append(aslide)
 
@@ -84,10 +85,12 @@ class SlideFormatter:
         slides = []
 
         # force last slide to be generated
-        text_in.append('\n')
+        text_in.append(u'\n')
 
         aslide = Slide(False)
         for line in text_in:
+            assert isinstance(line, unicode), 'Wrong type. Input file'\
+                                              'must be unicode'
             if line.strip() == '' and aslide.lines != []:
                 # start a new slide
                 aslide.should_finish_set(True)

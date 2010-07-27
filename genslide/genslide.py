@@ -7,6 +7,7 @@ Copyright (C) 2010 Lucas De Marchi <lucas.de.marchi@gmail.com>
 import sys
 import os
 import urlparse
+import codecs
 from optparse import OptionParser
 
 from url_opener import URLOpener
@@ -95,7 +96,7 @@ def main(*args):
         parser = find_parser(addr_parse_result.netloc)
         parsed_text = parser.run(html)
     else:
-        with open(addr_parse_result.path, 'r') as f:
+        with codecs.open(addr_parse_result.path, encoding='utf-8', mode='r') as f:
             parsed_text = f.readlines()
 
     slidefmt = SlideFormatter('/tmp/', True)
@@ -104,8 +105,8 @@ def main(*args):
         (tmp, outfile) = os.path.split(addr_parse_result.path)
         (outfile, root) = os.path.splitext(outfile)
         outfile += '.tex'
-        with open(os.path.join(sysconfig.option_parser.output_dir,
-                  outfile), 'w') as f:
+        with codecs.open(os.path.join(sysconfig.option_parser.output_dir,
+                  outfile), mode='w', encoding='utf-8') as f:
             f.writelines([l for l in parsed_text])
     else:
         for line in parsed_text:
