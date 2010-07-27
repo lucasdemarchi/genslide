@@ -106,10 +106,10 @@ def main(*args):
         outfile += '.tex'
         with open(os.path.join(sysconfig.option_parser.output_dir,
                   outfile), 'w') as f:
-            f.writelines([l.encode('utf-8') for l in parsed_text])
+            f.writelines([l for l in parsed_text])
     else:
         for line in parsed_text:
-            print line.encode('utf-8'),
+            print line,
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv))
