@@ -21,8 +21,8 @@ class SlideFormatter:
 
     def smart_split_line(self, line):
         if ((not self._twrapper) or len(line) <= self._max_cols):
-            return [line + u'\\\\\n']
-        return [l + u'\\\\\n' for l in self._twrapper.wrap(line)]
+            return [line]
+        return self._twrapper.wrap(line)
 
     def glue_slides(self, slides):
         text_out = []
@@ -30,16 +30,8 @@ class SlideFormatter:
         with codecs.open(tmpl, encoding='utf-8', mode='r') as f:
             text_out = f.readlines()
 
-        i = 0
-        chorus = -1
-        for aslide in slides:
-            if aslide.is_chorus():
-                chorus = i
-
-            text_out.extend(aslide.lines)
-            if (chorus >= 0):
-                text_out.extend(slides[chorus].lines)
-            i += 1
+        for s in slides:
+            text_out.extend(s.texify())
 
         tmpl = sysconfig.template_file_get(self._footer)
         with open(tmpl, 'r') as f:
@@ -47,21 +39,6 @@ class SlideFormatter:
             text_out.append(u'\n')
 
         return text_out
-
-    def finish_slide(self, slides, aslide):
-        #FIXME: this should be somehow in template
-        if len(slides) == 0:
-            aslide.lines.insert(0, u'\\bfseries{\n')
-        aslide.lines.insert(0, u'\\begin{center}\n')
-        aslide.lines.insert(0, u'\\begin{frame}[allowframebreaks]\n')
-
-        #FIXME: this should be somehow in template
-        if len(slides) == 0:
-            aslide.lines.append(u'}\n')
-        aslide.lines.append(u'\\end{center}\n')
-        aslide.lines.extend([u'\\end{frame}', u'\n' , u'\n'])
-
-        slides.append(aslide)
 
     def format(self, text_in):
         slides = []
@@ -77,20 +54,20 @@ class SlideFormatter:
                 # start a new slide
                 aslide.should_finish_set(True)
             elif line.strip() == '\\':
-                aslide.lines.append('\\vskip 20pt\n')
+                aslide.lines.append('')
             elif line.strip() != '':
                 line = line.strip()
-                if self.toupper:
+                if self._toupper:
                     line = line.upper()
                 spl = self.smart_split_line(line)
                 while len(spl):
                     aslide.lines.append(spl.pop(0))
                     if aslide.should_finish():
-                        self.finish_slide(slides, aslide)
+                        slides.append(aslide)
                         aslide = Slide(False)
 
             if aslide.should_finish():
-                self.finish_slide(slides, aslide)
+                slides.append(aslide)
                 aslide = Slide(False)
 
         return self.glue_slides(slides)
