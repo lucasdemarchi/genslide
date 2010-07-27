@@ -77,6 +77,9 @@ def parse_options():
     parser.add_option('-t', '--template',
                       action='store', type='string', dest='template',
                       help='Use TEMPLATE instead of the default one. [NOT USED YET]')
+    parser.add_option('-u', '--no-upper',
+                      action='store_false', dest='toupper', default=True,
+                      help='Do not convert input text to uppercase letters')
     (options, args) = parser.parse_args()
     if len(args) != 1:
         print 'ERROR: you must specify a file or internet address'
@@ -88,6 +91,7 @@ def parse_options():
 def main(*args):
     (options, args) = parse_options()
     sysconfig.option_parser = options
+
     addr = args[0]
     parsed_text = []
     addr_parse_result = urlparse.urlparse(addr)
@@ -99,7 +103,7 @@ def main(*args):
         with codecs.open(addr_parse_result.path, encoding='utf-8', mode='r') as f:
             parsed_text = f.readlines()
 
-    slidefmt = SlideFormatter('/tmp/', True)
+    slidefmt = SlideFormatter()
     parsed_text = slidefmt.format(parsed_text)
     if sysconfig.option_parser.output_dir:
         (tmp, outfile) = os.path.split(addr_parse_result.path)

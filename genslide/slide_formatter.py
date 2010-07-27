@@ -1,41 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sysconfig
 import textwrap
 import codecs
 
-class Slide:
-    def __init__(self, is_chorus):
-        self.lines = []
-        self._is_chorus = is_chorus
-        self._should_finish = False
-
-    def is_chorus_set(self, is_chorus):
-        self._is_chorus = is_chorus
-    def is_chorus(self):
-        return self._is_chorus
-    def should_finish(self):
-        if (self._should_finish or
-           (sysconfig.option_parser.max_rows and
-            len(self.lines) >= sysconfig.option_parser.max_rows)):
-            return True
-        return False
-    def should_finish_set(self, value):
-        self._should_finish = value
+import sysconfig
+from slide import Slide
 
 class SlideFormatter:
-    header=sysconfig.template + '.header'
-    footer=sysconfig.template + '.footer'
-
-    def __init__(self, builddir, toupper):
-        self.builddir = builddir
-        self.toupper = toupper
-        self._twrapper = None
+    def __init__(self):
+        self._header = sysconfig.header_template
+        self._footer = sysconfig.footer_template
+        self._toupper = sysconfig.option_parser.toupper
         self._max_cols = sysconfig.option_parser.max_cols
+        self._twrapper = None
         if self._max_cols:
-            self._twrapper = textwrap.TextWrapper(width=sysconfig.option_parser.max_cols,
-                                             break_on_hyphens=False)
+            self._twrapper = textwrap.TextWrapper(
+                    width=sysconfig.option_parser.max_cols,
+                    break_on_hyphens=False)
 
     def smart_split_line(self, line):
         if ((not self._twrapper) or len(line) <= self._max_cols):
@@ -44,7 +26,7 @@ class SlideFormatter:
 
     def glue_slides(self, slides):
         text_out = []
-        tmpl=sysconfig.template_file_get(self.header)
+        tmpl = sysconfig.template_file_get(self._header)
         with codecs.open(tmpl, encoding='utf-8', mode='r') as f:
             text_out = f.readlines()
 
@@ -59,7 +41,7 @@ class SlideFormatter:
                 text_out.extend(slides[chorus].lines)
             i += 1
 
-        tmpl = sysconfig.template_file_get(self.footer)
+        tmpl = sysconfig.template_file_get(self._footer)
         with open(tmpl, 'r') as f:
             text_out.extend(f.readlines())
             text_out.append(u'\n')

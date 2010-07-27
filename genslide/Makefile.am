@@ -5,5 +5,6 @@ pkgpython_PYTHON = \
 genslide.py \
 __init__.py \
 slide_formatter.py \
+slide.py \
 terra_html_parser.py \
 url_opener.py
