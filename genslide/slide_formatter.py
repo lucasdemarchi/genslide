@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import textwrap
 import codecs
 
 import sysconfig
@@ -12,17 +11,6 @@ class SlideFormatter:
         self._header = sysconfig.header_template
         self._footer = sysconfig.footer_template
         self._toupper = sysconfig.option_parser.toupper
-        self._max_cols = sysconfig.option_parser.max_cols
-        self._twrapper = None
-        if self._max_cols:
-            self._twrapper = textwrap.TextWrapper(
-                    width=sysconfig.option_parser.max_cols,
-                    break_on_hyphens=False)
-
-    def smart_split_line(self, line):
-        if ((not self._twrapper) or len(line) <= self._max_cols):
-            return [line]
-        return self._twrapper.wrap(line)
 
     def glue_slides(self, slides):
         text_out = []
@@ -52,16 +40,15 @@ class SlideFormatter:
                                               'must be unicode'
             if line.strip() == '' and aslide.lines != []:
                 # start a new slide
-                aslide.should_finish_set(True)
+                aslide.finish()
             elif line.strip() == '\\':
                 aslide.lines.append('')
             elif line.strip() != '':
                 line = line.strip()
                 if self._toupper:
                     line = line.upper()
-                spl = self.smart_split_line(line)
-                while len(spl):
-                    aslide.lines.append(spl.pop(0))
+                while line:
+                    line = aslide.append(line)
                     if aslide.should_finish():
                         slides.append(aslide)
                         aslide = Slide(False)
