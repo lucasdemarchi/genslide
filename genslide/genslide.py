@@ -49,7 +49,7 @@ def parse_options():
                       action='store', type='int', dest='max_cols',
                       help='Max number of cols per slide. If a certain row ' \
                               'is larger than this number, it will be split ' \
-                              'in the best possible manner. [NOT IMPLEMENTED YET]')
+                              'in the best possible manner.')
     parser.add_option('-r', '--max-rows',
                       action='store', type='int', dest='max_rows',
                       help='Max number of rows per slide. If a verse conttains ' \

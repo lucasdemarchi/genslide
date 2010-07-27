@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sysconfig
+import textwrap
 
 class Slide:
     def __init__(self, is_chorus):
@@ -29,6 +30,16 @@ class SlideFormatter:
     def __init__(self, builddir, toupper):
         self.builddir = builddir
         self.toupper = toupper
+        self._twrapper = None
+        self._max_cols = sysconfig.option_parser.max_cols
+        if self._max_cols:
+            self._twrapper = textwrap.TextWrapper(width=sysconfig.option_parser.max_cols,
+                                             break_on_hyphens=False)
+
+    def smart_split_line(self, line):
+        if ((not self._twrapper) or len(line) <= self._max_cols):
+            return [line + '\\\\\n']
+        return [l + '\\\\\n' for l in self._twrapper.wrap(line)]
 
     def format_file(self, file_in, file_out):
         self.__setup_dirs()
@@ -94,15 +105,19 @@ class SlideFormatter:
             elif line.strip() == '\\':
                 aslide.lines.append('\\vskip 20pt\n')
             elif line.strip() != '':
-                line = line.strip() + ' \\\\\n'
+                line = line.strip()
                 if self.toupper:
                     line = line.upper()
-                aslide.lines.append(line)
+                spl = self.smart_split_line(line)
+                while len(spl):
+                    aslide.lines.append(spl.pop(0))
+                    if aslide.should_finish():
+                        self.finish_slide(slides, aslide)
+                        aslide = Slide(False)
 
             if aslide.should_finish():
                 self.finish_slide(slides, aslide)
                 aslide = Slide(False)
-
 
         return self.glue_slides(slides)
 
