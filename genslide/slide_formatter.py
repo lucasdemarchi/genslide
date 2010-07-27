@@ -41,17 +41,6 @@ class SlideFormatter:
             return [line + '\\\\\n']
         return [l + '\\\\\n' for l in self._twrapper.wrap(line)]
 
-    def format_file(self, file_in, file_out):
-        self.__setup_dirs()
-
-        with open(file_in, 'r') as f:
-            text = f.readlines()
-
-        text_out = self.format(text)
-
-        with open(file_out, 'w') as f:
-            f.writelines(text_out)
-
     def glue_slides(self, slides):
         text_out = []
         tmpl=sysconfig.template_file_get(self.header)
