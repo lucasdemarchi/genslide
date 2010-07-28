@@ -7,4 +7,5 @@ __init__.py \
 slide_formatter.py \
 slide.py \
 terra_html_parser.py \
-url_opener.py
+url_opener.py \
+verse.py

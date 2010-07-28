@@ -5,7 +5,7 @@ import sysconfig
 import textwrap
 
 class Slide:
-    def __init__(self, is_chorus):
+    def __init__(self):
         self.lines = []
         self._should_finish = False
         self._max_rows = sysconfig.option_parser.max_rows
@@ -61,3 +61,5 @@ class Slide:
 
         return ret
 
+    def empty(self):
+        return not (len(self.lines))
