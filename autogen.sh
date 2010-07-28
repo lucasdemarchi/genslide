@@ -1,6 +1,8 @@
 #!/bin/sh
 
-autoreconf -f -i
+aclocal
+autoconf
+automake --add-missing --foreign
 
 if [ -z "$NOCONFIGURE" ]; then
 	./configure "$@"
