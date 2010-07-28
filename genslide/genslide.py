@@ -61,14 +61,6 @@ def parse_options():
                       help='Directory in which the generated latex file will be let. ' \
                               'Default is to output to stdout. If a directory is ' \
                               'specified, it will have the same name as input file')
-    parser.add_option('-l', '--latex',
-                      action='store_true', dest='let_latex', default=False,
-                      help='Let the generated latex file on output directory. ' \
-                              '[NOT USED YET]')
-    parser.add_option('-L', '--latex-only',
-                      action='store_true',  dest='let_latex_only', default=False,
-                      help='Do not generate the pdf file, let only the latex file' \
-                              'on output directory. [NOT USED YET]')
     parser.add_option('-T', '--template-dir',
                       action='store', type='string', dest='template_dir',
                       help='Use TEMPLATE_DIR in as a directory containing templates. ' \
