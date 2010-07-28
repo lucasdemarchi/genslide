@@ -11,13 +11,31 @@ datadirs.append(os.path.expanduser("~/.@PACKAGE_NAME@/data/"))
 datadirs.append(SYSTEM_DATA_DIR)
 
 option_parser = None
+template = 'default'
+template_header = 'header'
+template_footer = 'footer'
 
-header_template = 'default.header'
-footer_template = 'default.footer'
+def initialize():
+    global template
+    try:
+        if option_parser.template_dir:
+            datadirs.insert(0,
+                            os.path.expanduser(option_parser.template_dir))
+        if option_parser.template:
+            template = option_parser.template
+
+    except AttributeError:
+        raise AttributeError('NAUGHTY PROGRAMMER! PARSE OPTIONS BEFORE '\
+                             'INITIALIZING SYSCONFIG')
 
 def template_file_get(name):
+    filename = ''
     for d in datadirs:
-        _template = os.path.join(d, name + ".tex")
+        filename = '.'.join([template, name, 'tex'])
+        _template = os.path.join(d, filename)
         if os.path.exists(_template):
             return _template
-    raise Exception("No such template file: %s" % (name))
+    raise Exception('No such template file: %s\n' \
+                    'Verified paths were:\n\t%s' %
+                    (filename,
+                    '\n\t'.join([os.path.abspath(d) for d in datadirs])))

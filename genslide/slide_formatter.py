@@ -8,20 +8,16 @@ from slide import Slide
 from verse import Verse
 
 class SlideFormatter:
-    def __init__(self):
-        self._header = sysconfig.header_template
-        self._footer = sysconfig.footer_template
-
     def glue(self, verses):
         text_out = []
-        tmpl = sysconfig.template_file_get(self._header)
+        tmpl = sysconfig.template_file_get(sysconfig.template_header)
         with codecs.open(tmpl, encoding='utf-8', mode='r') as f:
             text_out = f.readlines()
 
         for v in verses:
             text_out.extend(v.texify())
 
-        tmpl = sysconfig.template_file_get(self._footer)
+        tmpl = sysconfig.template_file_get(sysconfig.template_footer)
         with open(tmpl, 'r') as f:
             text_out.extend(f.readlines())
             text_out.append(u'\n')

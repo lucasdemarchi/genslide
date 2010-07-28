@@ -64,11 +64,11 @@ def parse_options():
     parser.add_option('-T', '--template-dir',
                       action='store', type='string', dest='template_dir',
                       help='Use TEMPLATE_DIR in as a directory containing templates. ' \
-                              'It will be put in precedence to other default directories. ' \
-                              '[NOT USED YET]')
+                              'It will be put in precedence to other default '
+                              'directories.')
     parser.add_option('-t', '--template',
                       action='store', type='string', dest='template',
-                      help='Use TEMPLATE instead of the default one. [NOT USED YET]')
+                      help='Use TEMPLATE instead of the default one.')
     parser.add_option('-u', '--no-upper',
                       action='store_false', dest='toupper', default=True,
                       help='Do not convert input text to uppercase letters')
@@ -83,6 +83,7 @@ def parse_options():
 def main(*args):
     (options, args) = parse_options()
     sysconfig.option_parser = options
+    sysconfig.initialize()
 
     addr = args[0]
     parsed_text = []
