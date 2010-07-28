@@ -34,7 +34,7 @@ class SlideFormatter:
         # force last slide to be generated
         text_in.append(u'\n')
 
-        verse = Verse(False)
+        verse = Verse(_chorus=False, _title=True)
         for line in text_in:
             assert isinstance(line, unicode), 'Wrong type. Input file'\
                                               'must be unicode'
@@ -42,7 +42,7 @@ class SlideFormatter:
                 # start a new verse
                 verse.finish()
                 verses.append(verse)
-                verse = Verse(False)
+                verse = Verse(_chorus=False)
             elif line.strip() == '\\':
                 verse.lines.append('')
             elif line.strip() != '':

@@ -57,9 +57,16 @@ class Slide:
         #if len(slides) == 0:
         #    aslide.lines.append(u'}\n')
         ret.append(u'\\end{center}\n')
-        ret.extend([u'\\end{frame}', u'\n' , u'\n'])
+        ret.extend([u'\\end{frame}', u'\n', u'\n'])
 
         return ret
 
     def empty(self):
         return not (len(self.lines))
+
+class TitleSlide(Slide):
+    def texify(self):
+        ret = Slide.texify(self)
+        ret.insert(2, u'\\bfseries{\n')
+        ret.insert(-4, u'}\n')
+        return ret

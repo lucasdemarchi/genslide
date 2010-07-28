@@ -3,12 +3,15 @@
 
 import sysconfig
 from slide import Slide
+from slide import TitleSlide
 
 class Verse:
-    def __init__(self, _chorus=False):
+    def __init__(self, _chorus=False, _title=False):
         self.slides = []
         self._chorus = _chorus
         self._toupper = sysconfig.option_parser.toupper
+        if _title:
+            self.slides.append(TitleSlide())
 
     def chorus_set(self, _chorus):
         self.chorus = _chorus
