@@ -14,6 +14,8 @@ option_parser = None
 template = 'default'
 template_header = 'header'
 template_footer = 'footer'
+template_slide_start = 'slide.start'
+template_slide_end = 'slide.end'
 
 def initialize():
     global template

@@ -3,6 +3,7 @@
 
 import sysconfig
 import textwrap
+import codecs
 
 class Slide:
     def __init__(self):
@@ -39,24 +40,33 @@ class Slide:
         return None
 
     def texify(self):
-        ret = self.lines
+        # Start slide, putting theme just after the frame has started.
+        # We don't put a newline after \being{frame}, so user can pass options
+        # to the new slide.
+        ret = [u'\\begin{frame}']
+        with codecs.open(sysconfig.template_file_get('slide.start'),
+                         encoding='utf-8', mode='r') as f:
+            ret.extend(f.readlines())
 
-        for i in xrange(0, len(ret)):
-            if (ret[i] == ''):
-                ret[i] = '\\vskip 20pt\n'
+        # ensure we don't mix lines with theme
+        if ret[-1][-1:] != '\n':
+            ret.append(u'\n')
+
+        # All the meat goes here.
+        for l in self.lines:
+            if (l == ''):
+                ret.append(u'\\vskip 20pt\n')
             else:
-                ret[i] += '\\\\\n'
+                ret.append(''.join([l, '\\\\\n']))
 
-        #FIXME: this should be somehow in template
-        #if len(slides) == 0:
-        #    aslide.lines.insert(0, u'\\bfseries{\n')
-        ret.insert(0, u'\\begin{center}\n')
-        ret.insert(0, u'\\begin{frame}[allowframebreaks]\n')
+        # Finalize slide with the theme and \end{frame}
+        with codecs.open(sysconfig.template_file_get('slide.end'),
+                         encoding='utf-8', mode='r') as f:
+            ret.extend(f.readlines())
 
-        #FIXME: this should be somehow in template
-        #if len(slides) == 0:
-        #    aslide.lines.append(u'}\n')
-        ret.append(u'\\end{center}\n')
+        # ensure we don't mix lines with theme
+        if ret[-1][-1:] != '\n':
+            ret.append(u'\n')
         ret.extend([u'\\end{frame}', u'\n', u'\n'])
 
         return ret
