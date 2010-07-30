@@ -3,8 +3,11 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[brazil]{babel}
 \usepackage{palatino}
+\usepackage{pgf}
+\pgfdeclareimage[width=\the\paperwidth,height=\the\paperheight,interpolate=true]{img-bg}{default.bg.pdf}
 
 \usetheme{default}
 \usenavigationsymbolstemplate{}
+\setbeamertemplate{background canvas}{\pgfuseimage{img-bg}}
 
 \begin{document}
