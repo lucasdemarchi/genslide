@@ -56,6 +56,9 @@ def parse_options():
                       help='Max number of rows per slide. If a verse conttains ' \
                               'more rows than this number, it will be split in ' \
                               'slides.')
+    parser.add_option('-d', '--no-line-smart',
+                      action='store_false', dest='smart_line', default=True,
+                      help='Turn off the smart line wrapping')
     parser.add_option('-o', '--output-dir',
                       action='store', type='string', dest='output_dir',
                       help='Directory in which the generated latex file will be let. ' \
@@ -72,6 +75,7 @@ def parse_options():
     parser.add_option('-u', '--no-upper',
                       action='store_false', dest='toupper', default=True,
                       help='Do not convert input text to uppercase letters')
+
     (options, args) = parser.parse_args()
     if len(args) != 1:
         print 'ERROR: you must specify a file or internet address'

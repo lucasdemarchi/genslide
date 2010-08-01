@@ -22,13 +22,43 @@ class Slide:
     def finish(self):
         self._should_finish = True
 
-    def smart_split_line(self, line):
-        if ((not self._twrapper) or len(line) <= self._max_cols):
-            return [line]
+    def _smart_wrap_line(self, line):
+        lines = []
+        nlines = len(line) / self._max_cols \
+                 + ((len(line) % self._max_cols) > 0)
+
+        for i in range(0, nlines):
+            idx = len(line) / (nlines - i)
+            r = line.find(u' ', idx)
+            l = line.rfind(u' ', 0, idx)
+            if r == -1:
+                break
+            elif len(line[:r]) <= self._max_cols:
+                idx = r
+            elif len(line[:l]) <= self._max_cols:
+                idx = l
+            else:
+                raise Exception("WARNING: unknown line width")
+
+            lines.append(line[:idx])
+            line = line[idx + 1:]
+        lines.append(line)
+        return lines
+
+    def _wrap_line(self, line):
         return self._twrapper.wrap(line)
 
+    def wrap_line(self, line):
+        if ((not self._max_cols) or len(line) <= self._max_cols):
+            return [line]
+
+        if sysconfig.option_parser.smart_line:
+            return self._smart_wrap_line(line)
+        else:
+            return self._wrap_line(line)
+
     def append(self, line):
-        spl = self.smart_split_line(line)
+        spl = self.wrap_line(line)
         while len(spl) and not self._should_finish:
             self.lines.append(spl.pop(0))
             if self._max_rows and len(self.lines) >= self._max_rows:
