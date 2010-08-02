@@ -40,7 +40,7 @@ class SlideFormatter:
                 verses.append(verse)
                 verse = Verse(_chorus=False)
             elif line.strip() == '\\':
-                verse.lines.append('')
+                verse.append_line('')
             elif line.strip() != '':
                 verse.append_line(line)
 
