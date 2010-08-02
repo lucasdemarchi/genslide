@@ -34,7 +34,8 @@ class Verse:
             line = curslide.append(line)
 
     def empty(self):
-        return (len(self.slides) <= 1 and self.slides[0].empty())
+        return (len(self.slides) == 0 or \
+                self.slides[0].empty())
 
     def finish(self):
         #only the last slide might not be finished yet
