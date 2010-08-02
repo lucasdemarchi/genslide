@@ -107,6 +107,6 @@ class Slide:
 class TitleSlide(Slide):
     def texify(self):
         ret = Slide.texify(self)
-        ret.insert(2, u'\\bfseries{\n')
+        ret.insert(3, u'\\bfseries{\n')
         ret.insert(-4, u'}\n')
         return ret
