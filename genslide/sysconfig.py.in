@@ -16,6 +16,8 @@ template_header = 'header'
 template_footer = 'footer'
 template_slide_start = 'slide.start'
 template_slide_end = 'slide.end'
+template_title_start = 'title.start'
+template_title_end = 'title.end'
 
 def initialize():
     global template

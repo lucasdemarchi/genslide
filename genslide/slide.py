@@ -12,6 +12,8 @@ class Slide:
         self._max_rows = sysconfig.option_parser.max_rows
         self._max_cols = sysconfig.option_parser.max_cols
         self._twrapper = None
+        self._template_slide_start = sysconfig.template_slide_start
+        self._template_slide_end = sysconfig.template_slide_end
         if self._max_cols:
             self._twrapper = textwrap.TextWrapper(width=self._max_cols,
                                                   break_on_hyphens=False)
@@ -77,8 +79,9 @@ class Slide:
         # We don't put a newline after \being{frame}, so user can pass options
         # to the new slide.
         ret = [u'\\begin{frame}']
-        with codecs.open(sysconfig.template_file_get('slide.start'),
-                         encoding='utf-8', mode='r') as f:
+        with codecs.open(
+                sysconfig.template_file_get(self._template_slide_start),
+                encoding='utf-8', mode='r') as f:
             ret.extend(f.readlines())
 
         # ensure we don't mix lines with theme
@@ -93,8 +96,9 @@ class Slide:
                 ret.append(''.join([l, '\\\\\n']))
 
         # Finalize slide with the theme and \end{frame}
-        with codecs.open(sysconfig.template_file_get('slide.end'),
-                         encoding='utf-8', mode='r') as f:
+        with codecs.open(
+                sysconfig.template_file_get(self._template_slide_end),
+                encoding='utf-8', mode='r') as f:
             ret.extend(f.readlines())
 
         # ensure we don't mix lines with theme
@@ -120,8 +124,7 @@ class Slide:
         return self.lines.pop()
 
 class TitleSlide(Slide):
-    def texify(self):
-        ret = Slide.texify(self)
-        ret.insert(3, u'\\bfseries{\n')
-        ret.insert(-4, u'}\n')
-        return ret
+    def __init__(self):
+        Slide.__init__(self)
+        self._template_slide_start = sysconfig.template_title_start
+        self._template_slide_end = sysconfig.template_title_end
