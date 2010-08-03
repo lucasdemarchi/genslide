@@ -16,6 +16,9 @@ class Slide:
             self._twrapper = textwrap.TextWrapper(width=self._max_cols,
                                                   break_on_hyphens=False)
 
+    def __len__(self):
+        return len(self.lines)
+
     def should_finish(self):
         return self._should_finish
 

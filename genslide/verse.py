@@ -10,8 +10,12 @@ class Verse:
         self.slides = []
         self._chorus = _chorus
         self._toupper = sysconfig.option_parser.toupper
+        self._smart_verse = sysconfig.option_parser.smart_verse
         if _title:
             self.slides.append(TitleSlide())
+
+    def __len__(self):
+        return len(self.slides)
 
     def chorus_set(self, _chorus):
         self.chorus = _chorus
