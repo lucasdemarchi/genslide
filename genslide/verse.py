@@ -45,6 +45,25 @@ class Verse:
         #only the last slide might not be finished yet
         self.slides[-1].finish()
 
+        #Title is not meant to be re-organized
+        if self.slides and isinstance(self.slides[0], TitleSlide):
+            return
+
+        # Only the latest slide might be incomplete. By the way a Verse is
+        # made, previous verses should be complete, so we verify if the
+        # length of the latest slide is optimal, otherwise we start going
+        # backward, popping the latest lines and prepending in the current
+        # slide, until we reach a slide which has the optimal length.
+        # *optimal length*: All the verses should have the same
+        # length, preferring longer slides at the beginning if it's not
+        # possible to divide equally among the slides of a verse
+        if self._smart_verse and len(self.slides) >= 2:
+            ideal_last_len = sum(map(len, self.slides))  / len(self.slides)
+            for i in range(len(self.slides) - 1, 0, -1):
+                while len(self.slides[i]) < ideal_last_len:
+                    self.slides[i].prepend_finished(\
+                            self.slides[i-1].pop_finished())
+
     def texify(self):
         ret = []
         for s in self.slides:

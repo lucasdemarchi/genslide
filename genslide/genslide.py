@@ -59,6 +59,9 @@ def parse_options():
     parser.add_option('-d', '--no-line-smart',
                       action='store_false', dest='smart_line', default=True,
                       help='Turn off the smart line wrapping')
+    parser.add_option('-e', '--no-verse-smart',
+                      action='store_false', dest='smart_verse', default=True,
+                      help='Turn off the smart verse wrapping')
     parser.add_option('-o', '--output-dir',
                       action='store', type='string', dest='output_dir',
                       help='Directory in which the generated latex file will be let. ' \
