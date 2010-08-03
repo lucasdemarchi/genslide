@@ -1,7 +1,19 @@
-MAINTAINERCLEANFILES = configure Makefile.in install-sh py-compile \
-                       config.h.in aclocal.m4 config.sub config.guess \
-                       missing
 SUBDIRS = genslide data
+
+MAINTAINERCLEANFILES = \
+Makefile.in \
+aclocal.m4 \
+config.guess \
+config.h.in \
+config.h.in~ \
+config.sub \
+configure \
+depcomp \
+install-sh \
+ltconfig \
+ltmain.sh \
+missing \
+py-compile
 
 dist_bin_SCRIPTS = genslide-bin
 
