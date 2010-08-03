@@ -107,6 +107,18 @@ class Slide:
     def empty(self):
         return not (len(self.lines))
 
+    def prepend_finished(self, line):
+        if not self._should_finish:
+            raise Exception("prepend_finished is only allowed for a " \
+                            "finished slide")
+        self.lines.insert(0, line)
+
+    def pop_finished(self):
+        if not self._should_finish:
+            raise Exception("append_finished is only allowed for a " \
+                            "finished slide")
+        return self.lines.pop()
+
 class TitleSlide(Slide):
     def texify(self):
         ret = Slide.texify(self)
