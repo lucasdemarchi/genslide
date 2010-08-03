@@ -1,4 +1,4 @@
-AC_INIT([genslide], [0.1.0], [lucas.de.marchi@gmail.com])
+AC_INIT([genslide], [0.2.0], [lucas.de.marchi@gmail.com])
 
 AM_INIT_AUTOMAKE([1.6 dist-bzip2])
 
