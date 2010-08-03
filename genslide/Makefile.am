@@ -8,4 +8,5 @@ slide_formatter.py \
 slide.py \
 terra_html_parser.py \
 url_opener.py \
+sysconfig.py \
 verse.py
