@@ -46,6 +46,8 @@ class SlideFormatter:
                 verse = Verse(_chorus=False)
             elif line.strip() == '\\':
                 verse.append_line('')
+            elif line.strip() == '\\c':
+                verse.chorus_set(True)
             elif line.strip() != '':
                 verse.append_line(line)
 
