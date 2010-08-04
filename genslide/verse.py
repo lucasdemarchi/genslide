@@ -18,7 +18,7 @@ class Verse:
         return len(self.slides)
 
     def chorus_set(self, _chorus):
-        self.chorus = _chorus
+        self._chorus = _chorus
 
     def chorus(self):
         return self._chorus
