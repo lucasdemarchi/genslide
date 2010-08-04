@@ -14,8 +14,13 @@ class SlideFormatter:
         with codecs.open(tmpl, encoding='utf-8', mode='r') as f:
             text_out = f.readlines()
 
+        chorus = None
         for v in verses:
             text_out.extend(v.texify())
+            if v.chorus():
+                chorus = v
+            elif chorus:
+                text_out.extend(chorus.texify())
 
         tmpl = sysconfig.template_file_get(sysconfig.template_footer)
         with open(tmpl, 'r') as f:
