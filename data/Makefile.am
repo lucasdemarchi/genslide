@@ -9,6 +9,12 @@ files_DATA = \
     default.slide.end.tex \
     default.slide.start.tex \
     default.title.end.tex \
-    default.title.start.tex
+    default.title.start.tex \
+    blank.footer.tex \
+    blank.header.tex \
+    blank.slide.end.tex \
+    blank.slide.start.tex \
+    blank.title.end.tex \
+    blank.title.start.tex
 
 EXTRA_DIST = $(files_DATA)
