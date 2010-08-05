@@ -32,10 +32,10 @@ class TerraHTMLParser(HTMLParser.HTMLParser):
         if len(self.stack) > 0 and data.strip() != '':
             tag = self.stack[-1]
             if tag == 'div':
-                self.data.append(data.strip().upper() + u'\n')
+                self.data.append(data.strip() + u'\n')
             elif tag == 'h1':
                 self.stack.pop()
-                self.title = data.strip().upper()
+                self.title = data.strip()
                 self.data.insert(0, u'\n')
                 self.data.insert(0, self.title + u'\n')
 
