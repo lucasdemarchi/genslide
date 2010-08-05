@@ -95,20 +95,24 @@ def main(*args):
     addr = args[0]
     parsed_text = []
     addr_parse_result = urlparse.urlparse(addr)
+    outfile = None
     if find_method(addr_parse_result.scheme) != Schemes.LOCAL:
         html = URLOpener.open(addr)
         parser = find_parser(addr_parse_result.netloc)
         parsed_text = parser.run(html)
+        if sysconfig.option_parser.output_dir:
+            outfile = parser.title.replace(' ', '-').lower() + '.tex'
     else:
+        if sysconfig.option_parser.output_dir:
+            (tmp, outfile) = os.path.split(addr_parse_result.path)
+            (outfile, root) = os.path.splitext(outfile)
+            outfile += '.tex'
         with codecs.open(addr_parse_result.path, encoding='utf-8', mode='r') as f:
             parsed_text = f.readlines()
 
     slidefmt = SlideFormatter()
     parsed_text = slidefmt.format(parsed_text)
-    if sysconfig.option_parser.output_dir:
-        (tmp, outfile) = os.path.split(addr_parse_result.path)
-        (outfile, root) = os.path.splitext(outfile)
-        outfile += '.tex'
+    if outfile:
         with codecs.open(os.path.join(sysconfig.option_parser.output_dir,
                   outfile), mode='w', encoding='utf-8') as f:
             f.writelines([l for l in parsed_text])
