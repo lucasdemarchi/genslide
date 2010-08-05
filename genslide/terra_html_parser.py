@@ -10,24 +10,34 @@ class TerraHTMLParser(HTMLParser.HTMLParser):
         HTMLParser.HTMLParser.__init__(self)
         self.stack = []
         self.data = []
+        self.title = ''
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag.lower() == 'div' and attrs.has_key('id') and attrs['id'] == 'div_letra':
+            self.stack.append(tag)
+        elif tag.lower() == 'h1' and attrs.has_key('id') and attrs['id'] == 'identificador_musica':
             self.stack.append(tag)
 
     def handle_startendtag(self, tag, attrs):
         pass
 
     def handle_endtag(self, tag):
-        if len(self.stack) > 0 and tag.lower() == "div":
+        if len(self.stack) > 0 and tag.lower() ==  'div':
             self.stack.pop()
         elif len(self.stack) > 0 and tag.lower() == 'p':
-           self.data.append('\n')
+           self.data.append(u'\n')
 
     def handle_data(self, data):
         if len(self.stack) > 0 and data.strip() != '':
-            self.data.append(data.strip().upper() + '\n')
+            tag = self.stack[-1]
+            if tag == 'div':
+                self.data.append(data.strip().upper() + u'\n')
+            elif tag == 'h1':
+                self.stack.pop()
+                self.title = data.strip().upper()
+                self.data.insert(0, u'\n')
+                self.data.insert(0, self.title + u'\n')
 
     def run(self, markup):
         self.feed(markup)
