@@ -39,16 +39,19 @@ class SlideFormatter:
         for line in text_in:
             assert isinstance(line, unicode), 'Wrong type. Input file'\
                                               'must be unicode'
-            if line.strip() == '' and not verse.empty():
+            line = line.strip()
+            if line == '':
+                if verse.empty():
+                    continue
                 # start a new verse
                 verse.finish()
                 verses.append(verse)
                 verse = Verse(_chorus=False)
-            elif line.strip() == '\\':
-                verse.append_line('')
-            elif line.strip() == '\\c':
+            elif line == '\\c':
                 verse.chorus_set(True)
-            elif line.strip() != '':
+            elif line == '\\':
+                verse.append_line('')
+            else:
                 verse.append_line(line)
 
         return self.glue(verses)
