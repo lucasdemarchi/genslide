@@ -32,7 +32,7 @@ class Verse:
         if self._toupper:
             line = line.upper()
 
-        while line:
+        while line or line == '':
             self.prepare_for_line_append()
             curslide = self.slides[-1]
             line = curslide.append(line)
