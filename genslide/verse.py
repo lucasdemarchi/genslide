@@ -5,9 +5,18 @@ import sysconfig
 from slide import Slide
 from slide import TitleSlide
 
+class Block:
+    def __init__(self):
+        self.startslide = None
+        self.startline = None
+        self.endslide = None
+        self.endline = None
+
 class Verse:
     def __init__(self, _chorus=False, _title=False):
         self.slides = []
+        self.inblock = 0 # count the number of lines in a block
+        self._blocks = []
         self._chorus = _chorus
         self._toupper = sysconfig.option_parser.toupper
         self._smart_verse = sysconfig.option_parser.smart_verse
@@ -36,6 +45,32 @@ class Verse:
             self.prepare_for_line_append()
             curslide = self.slides[-1]
             line = curslide.append(line)
+
+    def append_line_inblock(self, line):
+        if not self.inblock:
+            b = Block()
+            b.startslide = len(self.slides)
+
+            # if there's no slide, we are on the first line
+            # o this verse
+            if b.startslide:
+                b.startline = len(self.slides[-1])
+            else:
+                b.startline = 0
+
+            self._blocks.append(b)
+
+        self.inblock += 1
+        self.append_line(line[1:].strip())
+
+    def close_inblock(self, line):
+        if not self.inblock:
+            raise Exception('Block not started, how can I close it?')
+
+        b = self._blocks[-1]
+        b.endslide = len(self.slides)
+        b.endline = len(self.slides[-1])
+        self.inblock = 0
 
     def empty(self):
         return (len(self.slides) == 0 or \

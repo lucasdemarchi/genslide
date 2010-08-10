@@ -51,6 +51,10 @@ class SlideFormatter:
                 verse.chorus_set(True)
             elif line == '\\':
                 verse.append_line('')
+            elif line[0] == '|':
+                verse.append_line_inblock(line)
+            elif verse.inblock:
+                verse.close_inblock(line)
             else:
                 verse.append_line(line)
 
