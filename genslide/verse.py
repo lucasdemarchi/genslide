@@ -49,14 +49,18 @@ class Verse:
     def append_line_inblock(self, line):
         if not self.inblock:
             b = Block()
-            b.startslide = len(self.slides)
+            b.startslide = len(self.slides) - 1
 
             # if there's no slide, we are on the first line
-            # o this verse
-            if b.startslide:
-                b.startline = len(self.slides[-1])
-            else:
+            # of this verse
+            if b.startslide < 0:
+                b.startslide = 0
                 b.startline = 0
+            elif self.slides[-1].should_finish():
+                b.startline = 0
+                b.startslide = len(self.slides)
+            else:
+                b.startline = len(self.slides[-1])
 
             self._blocks.append(b)
 
@@ -68,8 +72,8 @@ class Verse:
             raise Exception('Block not started, how can I close it?')
 
         b = self._blocks[-1]
-        b.endslide = len(self.slides)
-        b.endline = len(self.slides[-1])
+        b.endslide = len(self.slides) - 1
+        b.endline = len(self.slides[-1]) - 1
         self.inblock = 0
 
     def empty(self):
