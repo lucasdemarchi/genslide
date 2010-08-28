@@ -1,0 +1,116 @@
+Grammar by examples
+*******************
+
+Simple lyric
+============
+
+	Title
+
+	First verse
+	with two lines
+
+	Second verse with
+	three lines
+	here.
+
+
+Blank lines in a verse
+======================
+
+To force a blank line to be inserted in a verse without starting a new verse,
+use "\" to escape it, like this:
+
+	Title
+
+	This is a lyric
+	with a single verse
+	but this verse contains a blank line
+	\
+	Above was blank
+
+
+Chorus
+======
+
+A lyric might contain a chorus. If a verse is a chorus, it will be repeated
+after each other verse. A verse is marked as chorus by a '\c' in any place of
+current verse. Example:
+
+	title
+
+	This is the first verse
+	that contains 2 lines
+
+	\c
+	This verse is marked as chorus
+	So it will be repeated after each
+	other verse
+
+	For example, this is the third verse
+	and after this, the chorus will appear again
+	in the final .tex file
+
+
+You can have a lyric with more than one chorus. What happens is that the second
+chorus replaces the first one after that point. Example:
+
+	Title
+
+	First verse
+
+	\c
+	first chorus
+
+	another verse
+
+	another verse
+
+	\c
+	second chorus
+
+	another verse
+
+The final result will be:
+
+	Title
+
+	First verse
+
+	first chorus
+
+	another verse
+
+	first chorus
+
+	another verse
+
+	second chorus
+
+	another verse
+
+	second chorus
+
+Repeat block
+============
+
+In a verse, a certain block can be marked to be repeated. This is useful when
+there's, for example, a lyric that repeats n times the same phrase. In slides
+showing lyrics we usually see this like below:
+
+
+	these three lines
+	will be repeated              3x
+	again again and again
+
+With genslide this is achieved by marking the block to be repeated with the "|"
+at the beginning of each line, followed by the text to be used as repetition
+mark. This mark will be placed at the middle of that block.
+
+	|these three lines
+	|will be repeated
+	|again again and again
+	3x
+
+Be warned that as of now there's no control if the block spans for more than
+one slide. Bad things will happen if you mark, let's say, 10 lines to be
+repeated. This feature is intended for few lines.
