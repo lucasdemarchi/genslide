@@ -1,4 +1,4 @@
-MAINTAINERCLEANFILES = Makefile.in sysconfig.py
+MAINTAINERCLEANFILES = Makefile.in sysconfig.py sysconfig.pyc
 
 # ls -1 *.py | sed -e 's/\(.*\)/\1 \\/g'
 pkgpython_PYTHON = \
