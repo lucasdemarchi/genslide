@@ -17,7 +17,5 @@ py-compile
 
 dist_bin_SCRIPTS = genslide-bin
 
-dist-hook:
-	rm -rf `find $(distdir) -name '*.am'`
-	rm -rf `find $(distdir) -name '*.in'`
-	rm -rf `find $(distdir) -name 'configure.ac'`
+EXTRA_DIST = \
+autogen.sh
