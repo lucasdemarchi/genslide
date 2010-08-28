@@ -18,25 +18,6 @@ To be completed used you'll need these external software packages:
 However, you can still generate the .tex file without having these softwares,
 but you'll not be able to generate the final file.
 
-
-Grammar
-=======
-
-A lyric is written as a simple text file having the title on the first line and
-each verse separated by a blank line. See the example (ignore the first tab):
-
-	Title here
-
-	First verse starts here
-	and it has
-	three lines
-
-	Second verse starts here
-	and it has only 2 lines
-
-genslide will read this simple file and generate the correspondent .tex file.
-See the file GRAMMAR for more advanced usages.
-
 Compilation and instalation
 ===========================
 
@@ -62,4 +43,89 @@ call the main program, genslide-bin, on the root directory:
 
 However in this case, paths for genslide themes and data will not be set up and
 you'll have to pass them as command line options.
+
+
+
+Grammar
+=======
+
+A lyric is written as a simple text file having the title on the first line and
+each verse separated by a blank line. See the example (ignore the first tab):
+
+	Title here
+
+	First verse starts here
+	and it has
+	three lines
+
+	Second verse starts here
+	and it has only 2 lines
+
+genslide will read this simple file and generate the correspondent .tex file.
+See the file GRAMMAR for more advanced usages.
+
+Usage
+=====
+
+For a complete list of options allowed by genslide, run with the help flags:
+
+	$ genslide-bin -h
+
+Basic usage is, for outputting to stdout the generated latex:
+
+	$ genslide-bin lyric.txt
+
+You can set the '-o' flag, to specify a directory in which the file will be
+saved. It will have the same name of the input file, but the extension will be
+changed to ".tex":
+
+	$ genslide-bin -o /tmp/ lyric.txt
+
+To limit the number of rows per slide, use the '-r' options:
+
+	$ genslide-bin -o /tmp/ -r5 lyric.txt
+
+To limit the number of columns per line, use the '-c' options (it can be
+combined with the '-r' option above:
+
+	$ genslide-bin -c20 lyric.txt
+
+	or
+
+	$ genslide-bin -o /tmp/ -c20 lyric.txt
+
+	or
+
+	$ genslide-bin -o /tmp/ -c20 -r5 lyric.txt
+
+To set directory in which to search for templates, use the '-T' option:
+
+	$ genslide-bin -T $HOME/my_template_dir/ lyric.txt
+
+With '-t' option, also the template name can be set. If no '-t' option is
+given, it will use the 'default' template:
+
+	$ genslide-bin -T $HOME/my_template_dir/  template_name  lyric.txt
+
+By default, genslide will convert all letters to uppercase. To switch use 'u'
+or '--no-upper' flag:
+
+	$ genslide-bin -u lyric.txt
+
+By default, genslide will try to be smart and split lines and verses that do
+not fit in one slide. For example, if you set the maximum number of columns to
+20 and your phrase has 25 letters, it will try to divide the line more or less
+in the middle. Also, if a verse needs 3 slides, it will try to put the same
+number of lines in each of them. To turn off this behavior, use the
+'--no-line-smart' and '--no-verse-smart':
+
+	$ genslide-bin --no-line-smart lyric.txt
+
+	or
+
+	$ genslide-bin --no-verse-smart lyric.txt
+
+	or
+
+	$ genslide-bin --no-line-smart --no-verse-smart lyric.txt
 
