@@ -1,0 +1,65 @@
+genslide - Create slides for music lyrics
+*****************************************
+
+Copyright (C) 2010 Lucas De Marchi <lucas.de.marchi@gmail.com>
+
+About and dependencies
+======================
+
+genslide generates a latex file out from a simple text file (or an url address
+from certain sites containing lyrics). This file is to be given as input to
+pdflatex in order to have the slides generated with that lyric.
+
+To be completed used you'll need these external software packages:
+	- Latex
+	- Beamer module for latex
+	- pdflatex
+
+However, you can still generate the .tex file without having these softwares,
+but you'll not be able to generate the final file.
+
+
+Grammar
+=======
+
+A lyric is written as a simple text file having the title on the first line and
+each verse separated by a blank line. See the example (ignore the first tab):
+
+	Title here
+
+	First verse starts here
+	and it has
+	three lines
+
+	Second verse starts here
+	and it has only 2 lines
+
+genslide will read this simple file and generate the correspondent .tex file.
+See the file GRAMMAR for more advanced usages.
+
+Compilation and instalation
+===========================
+
+genslide is a python program, you don't really have to compile it. But you
+still have to configure so all the paths are configured and the bytecode are
+generated.
+
+To configure run:
+	./configure --prefix=/usr
+
+Configure will set up all the paths to be installed under /usr. The default
+prefix is /usr/local/.
+
+To install run:
+	make && make install
+
+Running without installing
+==========================
+
+It's possible to run genslide without installing it. All you have to do is to
+call the main program, genslide-bin, on the root directory:
+	./genslide-bin
+
+However in this case, paths for genslide themes and data will not be set up and
+you'll have to pass them as command line options.
+

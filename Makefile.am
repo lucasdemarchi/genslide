@@ -18,4 +18,4 @@ py-compile
 dist_bin_SCRIPTS = genslide-bin
 
 EXTRA_DIST = \
-autogen.sh
+autogen.sh GRAMMAR
