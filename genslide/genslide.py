@@ -67,6 +67,9 @@ def parse_options():
                       help='Directory in which the generated latex file will be let. ' \
                               'Default is to output to stdout. If a directory is ' \
                               'specified, it will have the same name as input file')
+    parser.add_option('-s', '--save-txt',
+                      action='store_true', dest='save_txt',
+                      help='Save a copy of the text to output dir.')
     parser.add_option('-T', '--template-dir',
                       action='store', type='string', dest='template_dir',
                       help='Use TEMPLATE_DIR in as a directory containing templates. ' \
@@ -85,6 +88,11 @@ def parse_options():
         parser.print_help()
         sys.exit(1)
 
+    if not options.output_dir and options.save_txt:
+        print 'ERROR: --save-txt options demands that an output directory is given'
+        parser.print_help()
+        sys.exit(1)
+
     return options, args
 
 def main(*args):
@@ -96,12 +104,14 @@ def main(*args):
     parsed_text = []
     addr_parse_result = urlparse.urlparse(addr)
     outfile = None
+    outfiletxt = None
     if find_method(addr_parse_result.scheme) != Schemes.LOCAL:
         html = URLOpener.open(addr)
         parser = find_parser(addr_parse_result.netloc)
         parsed_text = parser.run(html)
         if sysconfig.option_parser.output_dir:
             outfile = parser.title.replace(' ', '-').lower() + '.tex'
+            outfiletxt = outfile[0:-4] + '.txt'
     else:
         if sysconfig.option_parser.output_dir:
             (tmp, outfile) = os.path.split(addr_parse_result.path)
@@ -111,14 +121,19 @@ def main(*args):
             parsed_text = f.readlines()
 
     slidefmt = SlideFormatter()
-    parsed_text = slidefmt.format(parsed_text)
+    fmt_text = slidefmt.format(parsed_text)
     if outfile:
         with codecs.open(os.path.join(sysconfig.option_parser.output_dir,
                   outfile), mode='w', encoding='utf-8') as f:
-            f.writelines([l for l in parsed_text])
+            f.writelines([l for l in fmt_text])
     else:
-        for line in parsed_text:
+        for line in fmt_text:
             print line,
+
+    if outfiletxt:
+        with codecs.open(os.path.join(sysconfig.option_parser.output_dir,
+                outfiletxt), mode='w', encoding='utf-8') as f:
+            f.writelines([l for l in parsed_text])
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv))
