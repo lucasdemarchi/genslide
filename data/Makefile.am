@@ -15,6 +15,14 @@ files_DATA = \
     blank-slide-end.tex \
     blank-slide-start.tex \
     blank-title-end.tex \
-    blank-title-start.tex
+    blank-title-start.tex \
+    conf-bg.pdf \
+    conf-bg.xcf \
+    conf-footer.tex \
+    conf-header.tex \
+    conf-slide-end.tex \
+    conf-slide-start.tex \
+    conf-title-end.tex \
+    conf-title-start.tex
 
 EXTRA_DIST = $(files_DATA)

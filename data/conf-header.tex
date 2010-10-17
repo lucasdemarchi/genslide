@@ -1,0 +1,21 @@
+\documentclass[
+20pt,
+xetex
+]{beamer}
+
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+
+\defaultfontfeatures{Mapping=tex-text}
+\setmainfont[BoldFont={* Bold}]{Calibri}
+\setsansfont[BoldFont={* Bold}]{Calibri}
+
+\usepackage{pgf}
+\pgfdeclareimage[width=\the\paperwidth,height=\the\paperheight,interpolate=true]{img-bg}{conf-bg.pdf}
+
+\usetheme{default}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{background canvas}{\pgfuseimage{img-bg}}
+
+\begin{document}
