@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import HTMLParser
+import html.parser
 
-class TerraHTMLParser(HTMLParser.HTMLParser):
+class TerraHTMLParser(html.parser.HTMLParser):
     '''A simple parser for http://letras.terra.com.br'''
 
     def __init__(self, *args, **kwargs):
-        HTMLParser.HTMLParser.__init__(self)
+        html.parser.HTMLParser.__init__(self)
         self.stack = []
         self.data = []
         self.title = ''
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        if tag.lower() == 'div' and attrs.has_key('id') and attrs['id'] == 'div_letra':
+        if tag.lower() == 'div' and 'id' in attrs and attrs['id'] == 'div_letra':
             self.stack.append(tag)
-        elif tag.lower() == 'h1' and attrs.has_key('id') and attrs['id'] == 'identificador_musica':
+        elif tag.lower() == 'h1' and 'id' in attrs and attrs['id'] == 'identificador_musica':
             self.stack.append(tag)
 
     def handle_startendtag(self, tag, attrs):
@@ -26,18 +26,18 @@ class TerraHTMLParser(HTMLParser.HTMLParser):
         if len(self.stack) > 0 and tag.lower() ==  'div':
             self.stack.pop()
         elif len(self.stack) > 0 and tag.lower() == 'p':
-           self.data.append(u'\n')
+           self.data.append('\n')
 
     def handle_data(self, data):
         if len(self.stack) > 0 and data.strip() != '':
             tag = self.stack[-1]
             if tag == 'div':
-                self.data.append(data.strip() + u'\n')
+                self.data.append(data.strip() + '\n')
             elif tag == 'h1':
                 self.stack.pop()
                 self.title = data.strip()
-                self.data.insert(0, u'\n')
-                self.data.insert(0, self.title + u'\n')
+                self.data.insert(0, '\n')
+                self.data.insert(0, self.title + '\n')
 
     def run(self, markup):
         self.feed(markup)
@@ -61,4 +61,4 @@ Quando forçado és contra as ondas lutar<br/>
 '''
     lines = TerraHTMLParser().run(test_string)
     for line in lines:
-        print line,
+        print(line, end=' ')

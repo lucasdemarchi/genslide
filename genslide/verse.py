@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sysconfig
-from slide import Slide
-from slide import TitleSlide
+from . import sysconfig
+from .slide import Slide
+from .slide import TitleSlide
 
 class Block:
     def __init__(self):

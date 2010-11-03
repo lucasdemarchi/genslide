@@ -6,14 +6,14 @@ Copyright (C) 2010 Lucas De Marchi <lucas.de.marchi@gmail.com>
 
 import sys
 import os
-import urlparse
+import urllib.parse
 import codecs
 from optparse import OptionParser
 
-from url_opener import URLOpener
-from terra_html_parser import TerraHTMLParser
-from slide_formatter import SlideFormatter
-import sysconfig
+from .url_opener import URLOpener
+from .terra_html_parser import TerraHTMLParser
+from .slide_formatter import SlideFormatter
+from . import sysconfig
 
 def find_parser(netloc):
     netlocs = []
@@ -84,12 +84,12 @@ def parse_options():
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
-        print 'ERROR: you must specify a file or internet address'
+        print('ERROR: you must specify a file or internet address')
         parser.print_help()
         sys.exit(1)
 
     if not options.output_dir and options.save_txt:
-        print 'ERROR: --save-txt options demands that an output directory is given'
+        print('ERROR: --save-txt options demands that an output directory is given')
         parser.print_help()
         sys.exit(1)
 
@@ -102,7 +102,7 @@ def main(*args):
 
     addr = args[0]
     parsed_text = []
-    addr_parse_result = urlparse.urlparse(addr)
+    addr_parse_result = urllib.parse.urlparse(addr)
     outfile = None
     outfiletxt = None
     if find_method(addr_parse_result.scheme) != Schemes.LOCAL:
@@ -128,7 +128,7 @@ def main(*args):
             f.writelines([l for l in fmt_text])
     else:
         for line in fmt_text:
-            print line,
+            print(line, end=' ')
 
     if outfiletxt:
         with codecs.open(os.path.join(sysconfig.option_parser.output_dir,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sysconfig
+from . import sysconfig
 import textwrap
 import codecs
 
@@ -34,8 +34,8 @@ class Slide:
 
         for i in range(0, nlines):
             idx = len(line) / (nlines - i)
-            r = line.find(u' ', idx)
-            l = line.rfind(u' ', 0, idx)
+            r = line.find(' ', idx)
+            l = line.rfind(' ', 0, idx)
             if r == -1:
                 break
             elif len(line[:r]) <= self._max_cols:
@@ -78,7 +78,7 @@ class Slide:
         # Start slide, putting theme just after the frame has started.
         # We don't put a newline after \being{frame}, so user can pass options
         # to the new slide.
-        ret = [u'\\begin{frame}']
+        ret = ['\\begin{frame}']
         with codecs.open(
                 sysconfig.template_file_get(self._template_slide_start),
                 encoding='utf-8', mode='r') as f:
@@ -86,12 +86,12 @@ class Slide:
 
         # ensure we don't mix lines with theme
         if ret[-1][-1:] != '\n':
-            ret.append(u'\n')
+            ret.append('\n')
 
         # All the meat goes here.
         for l in self.lines:
             if (l == ''):
-                ret.append(u'\\vskip 20pt\n')
+                ret.append('\\vskip 20pt\n')
             else:
                 ret.append(''.join([l, '\\\\\n']))
 
@@ -103,8 +103,8 @@ class Slide:
 
         # ensure we don't mix lines with theme
         if ret[-1][-1:] != '\n':
-            ret.append(u'\n')
-        ret.extend([u'\\end{frame}', u'\n', u'\n'])
+            ret.append('\n')
+        ret.extend(['\\end{frame}', '\n', '\n'])
 
         return ret
 

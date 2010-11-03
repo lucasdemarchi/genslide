@@ -3,9 +3,9 @@
 
 import codecs
 
-import sysconfig
-from slide import Slide
-from verse import Verse
+from . import sysconfig
+from .slide import Slide
+from .verse import Verse
 
 class SlideFormatter:
     def glue(self, verses):
@@ -25,7 +25,7 @@ class SlideFormatter:
         tmpl = sysconfig.template_file_get(sysconfig.template_footer)
         with open(tmpl, 'r') as f:
             text_out.extend(f.readlines())
-            text_out.append(u'\n')
+            text_out.append('\n')
 
         return text_out
 
@@ -33,11 +33,11 @@ class SlideFormatter:
         verses = []
 
         # force last slide to be generated
-        text_in.append(u'\n')
+        text_in.append('\n')
 
         verse = Verse(_chorus=False, _title=True)
         for line in text_in:
-            assert isinstance(line, unicode), 'Wrong type. Input file'\
+            assert isinstance(line, str), 'Wrong type. Input file'\
                                               'must be unicode'
             line = line.strip()
             if line == '':
