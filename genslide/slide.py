@@ -29,11 +29,11 @@ class Slide:
 
     def _smart_wrap_line(self, line):
         lines = []
-        nlines = len(line) / self._max_cols \
-                 + ((len(line) % self._max_cols) > 0)
+        nlines = int(len(line) / self._max_cols \
+                 + ((len(line) % self._max_cols) > 0))
 
         for i in range(0, nlines):
-            idx = len(line) / (nlines - i)
+            idx = int(len(line) / (nlines - i))
             r = line.find(' ', idx)
             l = line.rfind(' ', 0, idx)
             if r == -1:
